@@ -1,0 +1,19 @@
+services:
+  web:
+    build: ./web
+    image: novel-studio-web
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PG_HOST: db
+      PG_PORT: "5432"
+      PG_USER: novel_studio
+      PG_DB: novel_studio
+    ports:
+      - "127.0.0.1:3011:3000"
+
+# Reuse traffic-monitor's bridge so we can resolve the shared `db` container.
+networks:
+  default:
+    name: traffic-monitor_default
+    external: true

@@ -1,0 +1,9 @@
+.env
+node_modules/
+.next/
+*.log
+
+# Runtime / creative content — DB is the source of truth.
+# Never commit the novel's prose or seed dumps to a public repo.
+db/seed*.sql
+db/*.dump
