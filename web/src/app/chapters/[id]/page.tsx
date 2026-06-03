@@ -38,7 +38,7 @@ export default async function ChapterEditor({ params }: { params: { id: string }
           </label>
           <label className="col-span-2">
             <span className={lbl}>状态</span>
-            <select name="status" defaultValue={chapter.status} className={inp}>
+            <select name="status" defaultValue={chapter.status} className={sel}>
               {STATUSES.map((s) => (
                 <option key={s} value={s}>
                   {STATUS_LABEL[s]}
@@ -55,7 +55,7 @@ export default async function ChapterEditor({ params }: { params: { id: string }
         <div className="grid grid-cols-12 gap-3">
           <label className="col-span-6">
             <span className={lbl}>所属卷</span>
-            <select name="volume_id" defaultValue={chapter.volume_id ?? ""} className={inp}>
+            <select name="volume_id" defaultValue={chapter.volume_id ?? ""} className={sel}>
               <option value="">（无）</option>
               {volumes.map((v) => (
                 <option key={v.id} value={v.id}>
@@ -66,7 +66,7 @@ export default async function ChapterEditor({ params }: { params: { id: string }
           </label>
           <label className="col-span-6">
             <span className={lbl}>所属剧情块</span>
-            <select name="arc_id" defaultValue={chapter.arc_id ?? ""} className={inp}>
+            <select name="arc_id" defaultValue={chapter.arc_id ?? ""} className={sel}>
               <option value="">（不归块）</option>
               {arcs.map((a) => (
                 <option key={a.id} value={a.id}>
@@ -119,3 +119,5 @@ export default async function ChapterEditor({ params }: { params: { id: string }
 const lbl = "block text-xs text-neutral-400 mb-1";
 const inp =
   "w-full rounded border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1.5 text-sm";
+const sel =
+  "w-full rounded border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 px-2 py-1.5 text-sm";

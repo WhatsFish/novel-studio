@@ -77,7 +77,7 @@ export default async function VolumesPage() {
                     <div className="text-xs text-neutral-400">新章节</div>
                     <input name="number" type="number" placeholder="章号" className={inp} required />
                     <input name="title" placeholder="章标题" className={inp} />
-                    <select name="arc_id" className={inp} defaultValue="">
+                    <select name="arc_id" className={sel} defaultValue="">
                       <option value="">（不归块）</option>
                       {arcsByVol(v.id).map((a) => (
                         <option key={a.id} value={a.id}>
@@ -133,5 +133,7 @@ function ChapterList({ chapters }: { chapters: Chapter[] }) {
 
 const inp =
   "w-full rounded border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1 text-sm";
+const sel =
+  "w-full rounded border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 px-2 py-1 text-sm";
 const btn =
   "rounded bg-neutral-800 text-white dark:bg-neutral-200 dark:text-neutral-900 px-3 py-1.5 text-sm hover:opacity-90";

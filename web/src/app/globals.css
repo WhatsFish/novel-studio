@@ -12,3 +12,11 @@
 }
 
 textarea { tab-size: 2; }
+
+/* Native form controls follow the active theme; options get an explicit
+   background so the popup list is never white-on-white in dark mode. */
+select { color-scheme: light dark; }
+option { background-color: #ffffff; color: #171717; }
+@media (prefers-color-scheme: dark) {
+  option { background-color: #1a1a1a; color: #ededed; }
+}

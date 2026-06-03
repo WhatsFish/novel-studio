@@ -47,7 +47,7 @@ export default async function ForeshadowsPage() {
               placeholder="收"
               className={`${inp} col-span-2`}
             />
-            <select name="status" defaultValue={f.status} className={`${inp} col-span-1`}>
+            <select name="status" defaultValue={f.status} className={`${sel} col-span-1`}>
               <option value="planted">未收</option>
               <option value="paid">已收</option>
             </select>
@@ -84,3 +84,5 @@ export default async function ForeshadowsPage() {
 
 const inp =
   "w-full rounded border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1 text-sm";
+const sel =
+  "w-full rounded border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 px-2 py-1 text-sm";
