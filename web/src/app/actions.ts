@@ -139,3 +139,127 @@ export async function deleteForeshadow(fd: FormData) {
   await query("DELETE FROM foreshadows WHERE id=$1", [id]);
   revalidatePath("/foreshadows");
 }
+
+// ---------- Characters ----------
+
+export async function createCharacter(fd: FormData) {
+  const name = s(fd, "name");
+  if (!name) return;
+  await query(
+    `INSERT INTO characters (name, aliases, faction, status, bio, secret, arc, first_appearance)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
+    [name, s(fd, "aliases"), s(fd, "faction"), s(fd, "status"), s(fd, "bio"), s(fd, "secret"), s(fd, "arc"), nOrNull(fd, "first_appearance")],
+  );
+  revalidatePath("/characters");
+  revalidatePath("/");
+}
+
+export async function updateCharacter(fd: FormData) {
+  const id = nOrNull(fd, "id");
+  if (id === null) return;
+  await query(
+    `UPDATE characters SET name=$2, aliases=$3, faction=$4, status=$5, bio=$6, secret=$7, arc=$8, first_appearance=$9 WHERE id=$1`,
+    [id, s(fd, "name"), s(fd, "aliases"), s(fd, "faction"), s(fd, "status"), s(fd, "bio"), s(fd, "secret"), s(fd, "arc"), nOrNull(fd, "first_appearance")],
+  );
+  revalidatePath("/characters");
+}
+
+export async function deleteCharacter(fd: FormData) {
+  const id = nOrNull(fd, "id");
+  if (id === null) return;
+  await query("DELETE FROM characters WHERE id=$1", [id]);
+  revalidatePath("/characters");
+}
+
+export async function createRelationship(fd: FormData) {
+  const from_id = nOrNull(fd, "from_id");
+  const to_id = nOrNull(fd, "to_id");
+  if (from_id === null || to_id === null) return;
+  await query("INSERT INTO relationships (from_id, to_id, kind, description) VALUES ($1,$2,$3,$4)", [
+    from_id,
+    to_id,
+    s(fd, "kind"),
+    s(fd, "description"),
+  ]);
+  revalidatePath("/characters");
+}
+
+export async function deleteRelationship(fd: FormData) {
+  const id = nOrNull(fd, "id");
+  if (id === null) return;
+  await query("DELETE FROM relationships WHERE id=$1", [id]);
+  revalidatePath("/characters");
+}
+
+// ---------- Settings (wiki) ----------
+
+export async function createSetting(fd: FormData) {
+  const title = s(fd, "title");
+  if (!title) return;
+  const ord = await one<{ m: number }>("SELECT COALESCE(MAX(ord),0)+1 AS m FROM settings");
+  await query("INSERT INTO settings (category, title, body, ord) VALUES ($1,$2,$3,$4)", [
+    s(fd, "category") || "世界观",
+    title,
+    s(fd, "body"),
+    ord?.m ?? 1,
+  ]);
+  revalidatePath("/settings");
+}
+
+export async function updateSetting(fd: FormData) {
+  const id = nOrNull(fd, "id");
+  if (id === null) return;
+  await query("UPDATE settings SET category=$2, title=$3, body=$4 WHERE id=$1", [
+    id,
+    s(fd, "category"),
+    s(fd, "title"),
+    s(fd, "body"),
+  ]);
+  revalidatePath("/settings");
+}
+
+export async function deleteSetting(fd: FormData) {
+  const id = nOrNull(fd, "id");
+  if (id === null) return;
+  await query("DELETE FROM settings WHERE id=$1", [id]);
+  revalidatePath("/settings");
+}
+
+// ---------- Economy / Power / Plotlines ----------
+
+export async function updateEconomy(fd: FormData) {
+  const id = nOrNull(fd, "id");
+  if (id === null) return;
+  await query("UPDATE economy SET name=$2, category=$3, rule=$4, value=$5, notes=$6 WHERE id=$1", [
+    id, s(fd, "name"), s(fd, "category"), s(fd, "rule"), s(fd, "value"), s(fd, "notes"),
+  ]);
+  revalidatePath("/settings");
+}
+
+export async function createEconomy(fd: FormData) {
+  const name = s(fd, "name");
+  if (!name) return;
+  const ord = await one<{ m: number }>("SELECT COALESCE(MAX(ord),0)+1 AS m FROM economy");
+  await query("INSERT INTO economy (name, category, rule, value, notes, ord) VALUES ($1,$2,$3,$4,$5,$6)", [
+    name, s(fd, "category"), s(fd, "rule"), s(fd, "value"), s(fd, "notes"), ord?.m ?? 1,
+  ]);
+  revalidatePath("/settings");
+}
+
+export async function updatePower(fd: FormData) {
+  const id = nOrNull(fd, "id");
+  if (id === null) return;
+  await query("UPDATE power_levels SET tier=$2, name=$3, abilities=$4, cost=$5, prerequisite=$6 WHERE id=$1", [
+    id, s(fd, "tier"), s(fd, "name"), s(fd, "abilities"), s(fd, "cost"), s(fd, "prerequisite"),
+  ]);
+  revalidatePath("/settings");
+}
+
+export async function updatePlotline(fd: FormData) {
+  const id = nOrNull(fd, "id");
+  if (id === null) return;
+  await query("UPDATE plotlines SET name=$2, kind=$3, description=$4 WHERE id=$1", [
+    id, s(fd, "name"), s(fd, "kind"), s(fd, "description"),
+  ]);
+  revalidatePath("/settings");
+}
